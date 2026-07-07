@@ -1,0 +1,231 @@
+/* ========================================
+   ENCABEZADO DE MARCAS
+======================================== */
+
+.encabezado-marcas {
+    background: #1b1b1b;
+    color: white;
+    text-align: center;
+    padding: 70px 20px;
+}
+
+.encabezado-marcas > p:first-child {
+    color: #e63946;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.encabezado-marcas h1 {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+
+.encabezado-marcas .descripcion {
+    color: #cccccc;
+    font-size: 17px;
+}
+
+
+/* ========================================
+   CONTENEDOR DE TODAS LAS MARCAS
+======================================== */
+
+.contenedor-marcas {
+    max-width: 1300px;
+    margin: auto;
+    padding: 70px 8%;
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 35px;
+}
+
+
+/* ========================================
+   TARJETA DE CADA MARCA
+======================================== */
+
+.card-marca {
+    position: relative;
+
+    height: 400px;
+
+    border-radius: 15px;
+    overflow: hidden;
+
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+
+    transition: 0.3s;
+}
+
+.card-marca:hover {
+    transform: translateY(-8px);
+
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+}
+
+
+/* ========================================
+   IMAGEN DE LA MARCA
+======================================== */
+
+.card-marca img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    transition: 0.5s;
+}
+
+.card-marca:hover img {
+    transform: scale(1.08);
+}
+
+
+/* ========================================
+   INFORMACIÓN SOBRE LA IMAGEN
+======================================== */
+
+.contenido-marca {
+    position: absolute;
+
+    left: 0;
+    bottom: 0;
+
+    width: 100%;
+
+    padding: 30px;
+
+    color: white;
+
+    background: linear-gradient(
+        transparent,
+        rgba(0, 0, 0, 0.95)
+    );
+}
+
+.contenido-marca h2 {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.contenido-marca p {
+    max-width: 500px;
+
+    margin-bottom: 20px;
+
+    line-height: 1.6;
+}
+
+
+/* ========================================
+   BOTÓN VER PRODUCTOS
+======================================== */
+
+.contenido-marca a {
+    display: inline-block;
+
+    padding: 12px 25px;
+
+    background: #e63946;
+    color: white;
+
+    text-decoration: none;
+
+    border-radius: 7px;
+
+    font-weight: 600;
+
+    transition: 0.3s;
+}
+
+.contenido-marca a:hover {
+    background: #c1121f;
+
+    transform: translateY(-3px);
+}
+
+
+/* ========================================
+   NEW BALANCE OCUPA TODO EL ANCHO
+======================================== */
+
+.card-marca:last-child {
+    grid-column: 1 / -1;
+}
+
+
+/* ========================================
+   ENLACES DEL FOOTER
+======================================== */
+
+footer a {
+    color: white;
+    text-decoration: none;
+
+    transition: 0.3s;
+}
+
+footer a:hover {
+    color: #e63946;
+}
+
+
+/* ========================================
+   RESPONSIVE - TABLET
+======================================== */
+
+@media (max-width: 900px) {
+
+    .contenedor-marcas {
+        grid-template-columns: 1fr;
+    }
+
+    .card-marca:last-child {
+        grid-column: auto;
+    }
+
+    .card-marca {
+        height: 350px;
+    }
+
+}
+
+
+/* ========================================
+   RESPONSIVE - CELULAR
+======================================== */
+
+@media (max-width: 600px) {
+
+    .encabezado-marcas {
+        padding: 50px 20px;
+    }
+
+    .encabezado-marcas h1 {
+        font-size: 36px;
+    }
+
+    .contenedor-marcas {
+        padding: 40px 20px;
+        gap: 25px;
+    }
+
+    .card-marca {
+        height: 330px;
+    }
+
+    .contenido-marca {
+        padding: 22px;
+    }
+
+    .contenido-marca h2 {
+        font-size: 27px;
+    }
+
+    .contenido-marca p {
+        font-size: 14px;
+    }
+
+}

@@ -1,37 +1,289 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SneakerZone</title>
+
+    <title>Productos | SneakerZone</title>
+
+    <!-- CSS general de toda la tienda -->
     <link rel="stylesheet" href="css/style.css">
- 
+
+    <!-- CSS exclusivo de la página de productos -->
+    <link rel="stylesheet" href="css/productos.css">
+
+    <!-- Fuente -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Iconos -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 
-<header>
-    <div class="logo">
-         <h2>Nuestros Productos</h2>
-    </div>
+<body>
 
-    <nav>
+    <!-- ================= HEADER ================= -->
 
-        <a href="index.html">Inicio</a>
-        <a>Productos</a>
-        <a href="#">Marcas</a>
-        <a href="#">Contacto</a>
-    
-    <nav>
-    
-    <div class="icons">
+    <header>
 
-        <a href="#"><i class="fa-solid fa-cart-shopping"></i></a>
+        <div class="logo">
+            <h2>SneakerZone</h2>
+        </div>
 
-    </div>
+        <nav>
+            <a href="index.html">Inicio</a>
+            <a href="productos.html">Productos</a>
+            <a href="marcas.html">Marcas</a>
+            <a href="index.html#contacto">Contacto</a>
+        </nav>
 
-<header>
+        <div class="icons">
+            <a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
+            <a href="carrito.html"><i class="fa-solid fa-cart-shopping"></i></a>
+            <a href="login.html"><i class="fa-solid fa-user"></i></a>
+        </div>
 
-    <body>
-    
+    </header>
 
-    </body>
+
+    <!-- ================= TÍTULO ================= -->
+
+    <section class="encabezado-productos">
+
+        <p>Encuentra tu próximo par</p>
+
+        <h1>Nuestros Productos</h1>
+
+    </section>
+
+
+    <!-- ================= CONTENIDO ================= -->
+
+    <main class="catalogo">
+
+        <!-- FILTROS -->
+
+        <aside class="filtros">
+
+            <h2>Filtros</h2>
+
+            <div class="grupo-filtro">
+
+                <h3>Marca</h3>
+
+                <label>
+                    <input type="checkbox" class="filtro-marca" value="nike">
+                    Nike
+                </label>
+
+                <label>
+                    <input type="checkbox" class="filtro-marca" value="jordan">
+                    Jordan
+                </label>
+
+                <label>
+                    <input type="checkbox" class="filtro-marca" value="adidas">
+                    Adidas
+                </label>
+
+                <label>
+                    <input type="checkbox" class="filtro-marca" value="puma">
+                    Puma
+                </label>
+
+                <label>
+                    <input type="checkbox" class="filtro-marca" value="new-balance">
+                    New Balance
+                </label>
+
+            </div>
+
+
+            <div class="grupo-filtro">
+
+                <h3>Talla</h3>
+
+                <select>
+                    <option>Todas las tallas</option>
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                </select>
+
+            </div>
+
+
+            <div class="grupo-filtro">
+
+                <h3>Precio máximo</h3>
+
+                <input type="range" min="50" max="500">
+
+            </div>
+
+        </aside>
+
+
+        <!-- ÁREA DE PRODUCTOS -->
+
+        <section class="area-productos">
+
+            <!-- BUSCADOR Y ORDEN -->
+
+            <div class="barra-productos">
+
+                <input
+                    type="search"
+                    placeholder="Buscar tenis..."
+                >
+
+                <select>
+                    <option>Ordenar por</option>
+                    <option>Precio: menor a mayor</option>
+                    <option>Precio: mayor a menor</option>
+                    <option>Más recientes</option>
+                </select>
+
+            </div>
+
+
+            <!-- GRID DE PRODUCTOS -->
+
+            <div class="grid-productos">
+
+
+                <!-- PRODUCTO 1 -->
+
+                <article class="card-producto" data-marca="nike">
+
+                    <img
+                        src="img/airforce1.jpg"
+                        alt="Nike Air Force 1"
+                    >
+
+                    <div class="info-producto">
+
+                        <span>Nike</span>
+
+                        <h3>Nike Air Force 1</h3>
+
+                        <p class="precio">US$ 120</p>
+
+                        <button>Agregar al carrito</button>
+
+                    </div>
+
+                </article>
+
+
+                <!-- PRODUCTO 2 -->
+
+                <article class="card-producto" data-marca="jordan">
+
+                    <img
+                        src="img/jordan4.jpg"
+                        alt="Jordan 4 Retro"
+                    >
+
+                    <div class="info-producto">
+
+                        <span>Jordan</span>
+
+                        <h3>Jordan 4 Retro</h3>
+
+                        <p class="precio">US$ 250</p>
+
+                        <button>Agregar al carrito</button>
+
+                    </div>
+
+                </article>
+
+
+                <!-- PRODUCTO 3 -->
+
+                <article class="card-producto" data-marca="adidas">
+
+                    <img
+                        src="img/campus00s.jpg"
+                        alt="Adidas Campus 00s"
+                    >
+
+                    <div class="info-producto">
+
+                        <span>Adidas</span>
+
+                        <h3>Adidas Campus 00s</h3>
+
+                        <p class="precio">US$ 110</p>
+
+                        <button>Agregar al carrito</button>
+
+                    </div>
+
+                </article>
+
+
+                <!-- PRODUCTO 4 -->
+
+                <article class="card-producto" data-marca="new-balance">
+
+                    <img
+                        src="img/newbalance550.jpg"
+                        alt="New Balance 550"
+                    >
+
+                    <div class="info-producto">
+                        
+                        <span>New Balance</span>
+
+                        <h3>New Balance 550</h3>
+
+                        <p class="precio">US$ 150</p>
+
+                        <button>Agregar al carrito</button>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer>
+
+        <div>
+            <h3>SneakerZone</h3>
+            <p>Tu tienda especializada en tenis de las mejores marcas.</p>
+        </div>
+
+        <div>
+            <h3>Enlaces</h3>
+            <p><a href="index.html">Inicio</a></p>
+            <p><a href="productos.html">Productos</a></p>
+        </div>
+
+        <div>
+            <h3>Contacto</h3>
+            <p>meloleuris12@gmail.com</p>
+            <p>República Dominicana</p>
+        </div>
+
+    </footer>
+         <script src="js/productos.js"></script>
+
+             </body>
+              </html>
+</body>
+
 </html>
