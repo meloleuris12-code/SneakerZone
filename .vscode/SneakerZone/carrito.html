@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Carrito | SneakerZone</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/carrito.css">
+</head>
+
+<body>
+
+    <!-- ================= HEADER ================= -->
+
+    <header>
+
+        <div class="logo">
+            <a href="index.html">SneakerZone</a>
+        </div>
+
+        <nav>
+            <a href="index.html">Inicio</a>
+            <a href="productos.html">Productos</a>
+            <a href="marcas.html">Marcas</a>
+            <a href="index.html#contacto">Contacto</a>
+        </nav>
+
+        <div class="iconos">
+
+            <a href="carrito.html">
+                🛒
+                <span id="contador-carrito">0</span>
+            </a>
+
+            <a href="login.html">
+                👤
+            </a>
+
+        </div>
+
+    </header>
+
+
+    <!-- ================= TITULO ================= -->
+
+    <section class="titulo-pagina">
+
+        <h1>Mi Carrito</h1>
+
+        <p>
+            Revisa los productos que has seleccionado
+        </p>
+
+    </section>
+
+
+    <!-- ================= CARRITO ================= -->
+
+    <main class="contenedor-carrito">
+
+        <!-- PRODUCTOS DEL CARRITO -->
+
+        <section class="productos-carrito">
+
+            <h2>Productos seleccionados</h2>
+
+            <div id="lista-carrito">
+
+                <!-- Los productos se mostrarán aquí mediante JavaScript -->
+
+            </div>
+
+        </section>
+
+
+        <!-- RESUMEN DE COMPRA -->
+
+        <aside class="resumen-carrito">
+
+            <h2>Resumen de compra</h2>
+
+            <div class="linea-resumen">
+
+                <span>Subtotal</span>
+
+                <span id="subtotal">
+                    RD$ 0
+                </span>
+
+            </div>
+
+
+            <div class="linea-resumen">
+
+                <span>Envío</span>
+
+                <span id="envio">
+                    RD$ 0
+                </span>
+
+            </div>
+
+
+            <div class="linea-total">
+
+                <span>Total</span>
+
+                <span id="total">
+                    RD$ 0
+                </span>
+
+            </div>
+
+
+            <button
+                class="btn-comprar"
+                id="btn-checkout">
+
+                Continuar compra
+
+            </button>
+
+
+            <a
+                href="productos.html"
+                class="seguir-comprando">
+
+                ← Seguir comprando
+
+            </a>
+
+        </aside>
+
+    </main>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer id="contacto">
+
+        <div>
+
+            <h3>SneakerZone</h3>
+
+            <p>
+                Tu tienda virtual especializada
+                en tenis y sneakers.
+            </p>
+
+        </div>
+
+
+        <div>
+
+            <h3>Enlaces</h3>
+
+            <a href="index.html">
+                Inicio
+            </a>
+
+            <a href="productos.html">
+                Productos
+            </a>
+
+            <a href="marcas.html">
+                Marcas
+            </a>
+
+        </div>
+
+
+        <div>
+
+            <h3>Contacto</h3>
+
+            <p>
+                meloleuris12.@gmail.com
+            </p>
+
+            <p>
+                República Dominicana
+            </p>
+
+        </div>
+
+    </footer>
+
+
+    <!-- ================= JAVASCRIPT ================= -->
+
+    <script src="js/carrito.js"></script>
+
+</body>
+</html>
