@@ -1,0 +1,557 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  }
+
+body {
+font-family: Poppins, sans-serif;
+background: #f7f7f7;
+color: #111;
+min-height: 100vh;
+}
+
+/* ================= HEADER ================= */
+
+header {
+width: 100%;
+height: 80px;
+padding: 0 8%;
+background: #111;
+display: flex;
+align-items: center;
+justify-content: space-between;
+}
+
+.logo h2 {
+color: white;
+font-size: 26px;
+}
+
+.logo a {
+text-decoration: none;
+}
+
+nav {
+display: flex;
+gap: 30px;
+}
+
+nav a {
+color: white;
+text-decoration: none;
+font-size: 15px;
+transition: 0.3s;
+}
+
+nav a:hover {
+color: #e63946;
+}
+
+.icons {
+display: flex;
+align-items: center;
+gap: 20px;
+}
+
+.icons a {
+color: white;
+font-size: 19px;
+text-decoration: none;
+transition: 0.3s;
+}
+
+.icons a:hover {
+color: #e63946;
+}
+
+/* ================= CONTENEDOR ================= */
+
+.login-container {
+min-height: calc(100vh - 80px);
+display: flex;
+justify-content: center;
+align-items: center;
+padding: 70px 20px;
+background: #f7f7f7;
+}
+
+/* ================= TARJETA LOGIN ================= */
+
+.login-card {
+width: 100%;
+max-width: 460px;
+background: white;
+padding: 45px 45px 40px;
+border-radius: 20px;
+box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* ================= ICONO ================= */
+
+.login-icon {
+width: 65px;
+height: 65px;
+margin: 0 auto 20px;
+border-radius: 50%;
+background: #111;
+color: white;
+display: flex;
+justify-content: center;
+align-items: center;
+font-size: 24px;
+}
+
+/* ================= TITULO ================= */
+
+.login-card h1 {
+text-align: center;
+font-size: 30px;
+font-weight: 600;
+margin-bottom: 8px;
+color: #111;
+}
+
+.subtitulo {
+text-align: center;
+color: #777;
+font-size: 14px;
+margin-bottom: 35px;
+}
+
+/* ================= CAMPOS ================= */
+
+.campo {
+margin-bottom: 22px;
+}
+
+.campo label {
+display: block;
+margin-bottom: 8px;
+font-size: 14px;
+font-weight: 500;
+color: #333;
+}
+
+/* ================= INPUT ================= */
+
+.input-container {
+position: relative;
+}
+
+.input-container i {
+position: absolute;
+left: 16px;
+top: 50%;
+transform: translateY(-50%);
+color: #888;
+font-size: 15px;
+transition: 0.3s;
+}
+
+.input-container input {
+width: 100%;
+height: 52px;
+padding: 0 18px 0 45px;
+background: #fafafa;
+border: 1px solid #e1e1e1;
+border-radius: 10px;
+outline: none;
+color: #111;
+font-family: Poppins, sans-serif;
+font-size: 14px;
+transition: 0.3s;
+}
+
+.input-container input:hover {
+border-color: #bbb;
+}
+
+.input-container input:focus {
+background: white;
+border-color: #111;
+box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.06);
+}
+
+.input-container:focus-within i {
+color: #e63946;
+}
+
+/* ================= BOTON LOGIN ================= */
+
+.btn-login {
+width: 100%;
+height: 52px;
+margin-top: 8px;
+border: none;
+border-radius: 10px;
+background: #111;
+color: white;
+font-family: Poppins, sans-serif;
+font-size: 15px;
+font-weight: 600;
+cursor: pointer;
+transition: 0.3s;
+}
+
+.btn-login:hover {
+background: #e63946;
+transform: translateY(-2px);
+box-shadow: 0 8px 20px rgba(230, 57, 70, 0.2);
+}
+
+/* ================= REGISTRO ================= */
+
+.registro-link {
+text-align: center;
+margin-top: 25px;
+color: #777;
+font-size: 14px;
+}
+
+.registro-link a {
+color: #111;
+text-decoration: none;
+font-weight: 600;
+transition: 0.3s;
+}
+
+.registro-link a:hover {
+color: #e63946;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 800px) {
+
+header {
+    padding: 0 5%;
+}
+
+nav {
+    display: none;
+}
+
+
+}
+
+@media (max-width: 500px) {
+
+.login-container {
+    padding: 40px 15px;
+}
+
+.login-card {
+    padding: 35px 25px;
+    border-radius: 16px;
+}
+
+.login-card h1 {
+    font-size: 26px;
+}
+
+}
+
+/* ================= CONTENEDOR PRINCIPAL ================= */
+.contenedor-login {
+    min-height: calc(100vh - 80px); /* Ajusta el alto descontando el header */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 20px;
+    background: #f7f7f7;
+}
+
+/* ================= TARJETA DE REGISTRO ================= */
+.caja-login {
+    width: 100%;
+    max-width: 550px; /* Tamaño ideal para un formulario de registro */
+    background: white;
+    padding: 40px 50px;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08); /* Sombra elegante */
+}
+
+/* ================= TÍTULOS ================= */
+.titulo-login {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.titulo-login p {
+    font-size: 14px;
+    font-weight: 600;
+    color: #e63946; /* Toque rojo de la marca */
+    margin-bottom: 5px;
+}
+
+.titulo-login h1 {
+    font-size: 32px;
+    color: #111;
+    margin-bottom: 5px;
+}
+
+.titulo-login span {
+    color: #777;
+    font-size: 14px;
+}
+
+/* ================= FORMULARIO ================= */
+#formulario-registro {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Espaciado uniforme entre todos los campos */
+}
+
+/* Hace que Nombre y Apellido estén uno al lado del otro */
+.fila-formulario {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.grupo-formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* Separación entre el texto y la caja de texto */
+}
+
+.grupo-formulario label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+}
+
+/* ================= ESTILO DE LOS INPUTS (ADIÓS CAJAS CUADRADAS) ================= */
+.grupo-formulario input {
+    width: 100%;
+    height: 52px;
+    padding: 0 18px;
+    background: #fafafa;
+    border: 1px solid #e1e1e1;
+    border-radius: 10px; /* Esto redondea las esquinas */
+    outline: none;
+    color: #111;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    transition: all 0.3s ease; /* Animación suave */
+}
+
+/* Efecto al pasar el mouse */
+.grupo-formulario input:hover {
+    border-color: #bbb;
+}
+
+/* Efecto al hacer clic para escribir */
+.grupo-formulario input:focus {
+    background: white;
+    border-color: #111; /* Borde negro para mantener el estilo de la marca */
+    box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.06); /* Resplandor sutil */
+}
+
+/* ================= BOTÓN ================= */
+.btn-login {
+    width: 100%;
+    height: 52px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 10px;
+    background: #111;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-login:hover {
+    background: #e63946; /* Se vuelve rojo al pasar el mouse */
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(230, 57, 70, 0.2);
+}
+
+/* ================= ENLACE INFERIOR ================= */
+.enlace-registro {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 14px;
+    color: #777;
+}
+
+.enlace-registro a {
+    color: #111;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.enlace-registro a:hover {
+    color: #e63946;
+}
+
+/* ================= RESPONSIVE (CELULARES) ================= */
+@media (max-width: 600px) {
+    .fila-formulario {
+        grid-template-columns: 1fr; /* Pone Nombre y Apellido en lista hacia abajo en pantallas pequeñas */
+    }
+
+    .caja-login {
+        padding: 30px 20px; /* Reduce los márgenes internos para que quepa en la pantalla */
+    }
+}
+
+/* ================= CONTENEDOR PRINCIPAL ================= */
+.contenedor-login {
+    min-height: calc(100vh - 80px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 20px;
+    background: #f7f7f7;
+}
+
+/* ================= TARJETAS (LOGIN Y REGISTRO) ================= */
+/* Estilos compartidos para ambas tarjetas */
+.caja-login, .tarjeta-login {
+    width: 100%;
+    background: white;
+    padding: 40px 50px;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* Tamaños específicos para que se vean proporcionadas */
+.caja-login {
+    max-width: 550px; /* Registro (necesita más espacio) */
+}
+
+.tarjeta-login {
+    max-width: 450px; /* Login (se ve mejor más compacto) */
+}
+
+/* ================= TÍTULOS Y ENCABEZADOS ================= */
+.titulo-login, .encabezado-login {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.titulo-login p, .encabezado-login p {
+    font-size: 14px;
+    font-weight: 600;
+    color: #e63946;
+    margin-bottom: 5px;
+}
+
+.titulo-login h1, .encabezado-login h1 {
+    font-size: 32px;
+    color: #111;
+    margin-bottom: 5px;
+}
+
+.titulo-login span, .encabezado-login span {
+    color: #777;
+    font-size: 14px;
+}
+
+/* ================= ESTRUCTURA DE FORMULARIOS ================= */
+#formulario-registro, #formulario-login {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.fila-formulario {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.grupo-formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.grupo-formulario label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+}
+
+/* ================= ESTILO DE LOS INPUTS ================= */
+.grupo-formulario input {
+    width: 100%;
+    height: 52px;
+    padding: 0 18px;
+    background: #fafafa;
+    border: 1px solid #e1e1e1;
+    border-radius: 10px;
+    outline: none;
+    color: #111;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.grupo-formulario input:hover {
+    border-color: #bbb;
+}
+
+.grupo-formulario input:focus {
+    background: white;
+    border-color: #111;
+    box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.06);
+}
+
+/* ================= BOTÓN ================= */
+.btn-login {
+    width: 100%;
+    height: 52px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 10px;
+    background: #111;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-login:hover {
+    background: #e63946;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(230, 57, 70, 0.2);
+}
+
+/* ================= ENLACE INFERIOR ================= */
+.enlace-registro {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 14px;
+    color: #777;
+}
+
+.enlace-registro a {
+    color: #111;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.enlace-registro a:hover {
+    color: #e63946;
+}
+
+/* ================= RESPONSIVE (CELULARES) ================= */
+@media (max-width: 600px) {
+    .fila-formulario {
+        grid-template-columns: 1fr;
+    }
+
+    .caja-login, .tarjeta-login {
+        padding: 30px 20px;
+    }
+}

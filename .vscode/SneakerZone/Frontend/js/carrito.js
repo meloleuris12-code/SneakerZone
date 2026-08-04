@@ -1,37 +1,72 @@
-// ===============================
+// ==========================================
+// CARRITO - SNEAKERZONE
+// ==========================================
+
+
+// ==========================================
 // OBTENER CARRITO
-// ===============================
+// ==========================================
 
-let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+let carrito =
+    JSON.parse(
+        localStorage.getItem("carrito")
+    ) || [];
 
 
-// ===============================
+// ==========================================
 // ELEMENTOS HTML
-// ===============================
+// ==========================================
 
-const listaCarrito = document.getElementById("lista-carrito");
+const listaCarrito =
+    document.getElementById(
+        "lista-carrito"
+    );
 
-const subtotalElemento = document.getElementById("subtotal");
+const subtotalElemento =
+    document.getElementById(
+        "subtotal"
+    );
 
-const envioElemento = document.getElementById("envio");
+const envioElemento =
+    document.getElementById(
+        "envio"
+    );
 
-const totalElemento = document.getElementById("total");
+const totalElemento =
+    document.getElementById(
+        "total"
+    );
 
-const contadorCarrito = document.getElementById("contador-carrito");
+const contadorCarrito =
+    document.getElementById(
+        "contador-carrito"
+    );
 
-const botonCheckout = document.getElementById("btn-checkout");
+const botonCheckout =
+    document.getElementById(
+        "btn-checkout"
+    );
 
 
-// ===============================
+// ==========================================
 // MOSTRAR CARRITO
-// ===============================
+// ==========================================
 
 function mostrarCarrito() {
+
+    if (!listaCarrito) {
+
+        return;
+
+    }
+
 
     listaCarrito.innerHTML = "";
 
 
-    // Si el carrito está vacío
+    // ==========================================
+    // CARRITO VACÍO
+    // ==========================================
 
     if (carrito.length === 0) {
 
@@ -56,109 +91,151 @@ function mostrarCarrito() {
         `;
 
 
-        subtotalElemento.textContent = "RD$ 0";
-
-        envioElemento.textContent = "RD$ 0";
-
-        totalElemento.textContent = "RD$ 0";
-
-        contadorCarrito.textContent = "0";
+        actualizarTotales();
 
         return;
 
     }
 
 
-    // Mostrar cada producto
+    // ==========================================
+    // MOSTRAR PRODUCTOS
+    // ==========================================
 
-    carrito.forEach(function(producto, index) {
-
-        const productoHTML = document.createElement("div");
-
-        productoHTML.classList.add("producto-carrito");
-
-
-        productoHTML.innerHTML = `
-
-            <img
-                src="${producto.imagen}"
-                alt="${producto.nombre}"
-            >
+    carrito.forEach(
+        function(producto, index) {
 
 
-            <div class="info-producto">
-
-                <h3>
-                    ${producto.nombre}
-                </h3>
-
-                <p>
-                    Marca: ${producto.marca}
-                </p>
-
-                <p>
-                    Talla: ${producto.talla}
-                </p>
+            const productoHTML =
+                document.createElement(
+                    "div"
+                );
 
 
-                <div class="cantidad">
+            productoHTML.classList.add(
+                "producto-carrito"
+            );
+
+
+            const precio =
+                Number(
+                    producto.precio
+                ) || 0;
+
+
+            const cantidad =
+                Number(
+                    producto.cantidad
+                ) || 1;
+
+
+            productoHTML.innerHTML = `
+
+                <img
+                    src="${producto.imagen}"
+                    alt="${producto.nombre}"
+                >
+
+
+                <div class="info-producto">
+
+                    <h3>
+                        ${producto.nombre}
+                    </h3>
+
+
+                    ${
+                        producto.marca
+                        ?
+                        `<p>Marca: ${producto.marca}</p>`
+                        :
+                        ""
+                    }
+
+
+                    ${
+                        producto.talla
+                        ?
+                        `<p>Talla: ${producto.talla}</p>`
+                        :
+                        ""
+                    }
+
+
+                    <div class="cantidad">
+
+                        <button
+                            onclick="disminuirCantidad(${index})">
+
+                            -
+
+                        </button>
+
+
+                        <span>
+                            ${cantidad}
+                        </span>
+
+
+                        <button
+                            onclick="aumentarCantidad(${index})">
+
+                            +
+
+                        </button>
+
+                    </div>
+
 
                     <button
-                        onclick="disminuirCantidad(${index})">
+                        class="btn-eliminar"
+                        onclick="eliminarProducto(${index})">
 
-                        -
-
-                    </button>
-
-
-                    <span>
-                        ${producto.cantidad}
-                    </span>
-
-
-                    <button
-                        onclick="aumentarCantidad(${index})">
-
-                        +
+                        Eliminar
 
                     </button>
 
                 </div>
 
 
-                <button
-                    class="btn-eliminar"
-                    onclick="eliminarProducto(${index})">
+                <div class="precio-producto">
 
-                    Eliminar
+                    US$ ${
+                        (precio * cantidad)
+                            .toLocaleString(
+                                "en-US",
+                                {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                }
+                            )
+                    }
 
-                </button>
+                </div>
 
-            </div>
-
-
-            <div class="precio-producto">
-
-                RD$ ${(producto.precio * producto.cantidad).toLocaleString()}
-
-            </div>
-
-        `;
+            `;
 
 
-        listaCarrito.appendChild(productoHTML);
+            listaCarrito.appendChild(
+                productoHTML
+            );
 
-    });
+        }
+    );
 
+
+    // ==========================================
+    // ACTUALIZAR TOTALES
+    // ==========================================
 
     actualizarTotales();
 
 }
 
 
-// ===============================
+// ==========================================
 // ACTUALIZAR TOTALES
-// ===============================
+// ==========================================
 
 function actualizarTotales() {
 
@@ -167,55 +244,138 @@ function actualizarTotales() {
     let cantidadProductos = 0;
 
 
-    carrito.forEach(function(producto) {
+    carrito.forEach(
+        function(producto) {
 
-        subtotal += producto.precio * producto.cantidad;
+            const precio =
+                Number(
+                    producto.precio
+                ) || 0;
 
-        cantidadProductos += producto.cantidad;
 
-    });
+            const cantidad =
+                Number(
+                    producto.cantidad
+                ) || 0;
 
 
-    // Envío
+            subtotal +=
+                precio * cantidad;
+
+
+            cantidadProductos +=
+                cantidad;
+
+        }
+    );
+
+
+    // ==========================================
+    // ENVÍO
+    // ==========================================
 
     let envio = 0;
 
 
     if (subtotal > 0) {
 
-        envio = 300;
+        envio = 25;
 
     }
 
 
-    const total = subtotal + envio;
+    const total =
+        subtotal + envio;
 
 
-    subtotalElemento.textContent =
-        "RD$ " + subtotal.toLocaleString();
+    // ==========================================
+    // MOSTRAR SUBTOTAL
+    // ==========================================
+
+    if (subtotalElemento) {
+
+        subtotalElemento.textContent =
+            "US$ " +
+            subtotal.toLocaleString(
+                "en-US",
+                {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }
+            );
+
+    }
 
 
-    envioElemento.textContent =
-        "RD$ " + envio.toLocaleString();
+    // ==========================================
+    // MOSTRAR ENVÍO
+    // ==========================================
+
+    if (envioElemento) {
+
+        envioElemento.textContent =
+            "US$ " +
+            envio.toLocaleString(
+                "en-US",
+                {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }
+            );
+
+    }
 
 
-    totalElemento.textContent =
-        "RD$ " + total.toLocaleString();
+    // ==========================================
+    // MOSTRAR TOTAL
+    // ==========================================
+
+    if (totalElemento) {
+
+        totalElemento.textContent =
+            "US$ " +
+            total.toLocaleString(
+                "en-US",
+                {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }
+            );
+
+    }
 
 
-    contadorCarrito.textContent =
-        cantidadProductos;
+    // ==========================================
+    // ACTUALIZAR CONTADOR
+    // ==========================================
+
+    if (contadorCarrito) {
+
+        contadorCarrito.textContent =
+            cantidadProductos;
+
+    }
 
 }
 
 
-// ===============================
+// ==========================================
 // AUMENTAR CANTIDAD
-// ===============================
+// ==========================================
 
 function aumentarCantidad(index) {
 
-    carrito[index].cantidad++;
+    if (!carrito[index]) {
+
+        return;
+
+    }
+
+
+    carrito[index].cantidad =
+        Number(
+            carrito[index].cantidad
+        ) + 1;
 
 
     guardarCarrito();
@@ -223,15 +383,29 @@ function aumentarCantidad(index) {
 }
 
 
-// ===============================
+// ==========================================
 // DISMINUIR CANTIDAD
-// ===============================
+// ==========================================
 
 function disminuirCantidad(index) {
 
-    if (carrito[index].cantidad > 1) {
+    if (!carrito[index]) {
 
-        carrito[index].cantidad--;
+        return;
+
+    }
+
+
+    const cantidadActual =
+        Number(
+            carrito[index].cantidad
+        );
+
+
+    if (cantidadActual > 1) {
+
+        carrito[index].cantidad =
+            cantidadActual - 1;
 
     }
 
@@ -241,13 +415,23 @@ function disminuirCantidad(index) {
 }
 
 
-// ===============================
+// ==========================================
 // ELIMINAR PRODUCTO
-// ===============================
+// ==========================================
 
 function eliminarProducto(index) {
 
-    carrito.splice(index, 1);
+    if (!carrito[index]) {
+
+        return;
+
+    }
+
+
+    carrito.splice(
+        index,
+        1
+    );
 
 
     guardarCarrito();
@@ -255,15 +439,17 @@ function eliminarProducto(index) {
 }
 
 
-// ===============================
+// ==========================================
 // GUARDAR CARRITO
-// ===============================
+// ==========================================
 
 function guardarCarrito() {
 
     localStorage.setItem(
         "carrito",
-        JSON.stringify(carrito)
+        JSON.stringify(
+            carrito
+        )
     );
 
 
@@ -272,34 +458,39 @@ function guardarCarrito() {
 }
 
 
-// ===============================
+// ==========================================
 // FINALIZAR COMPRA
-// ===============================
+// ==========================================
 
-botonCheckout.addEventListener(
-    "click",
-    function() {
+if (botonCheckout) {
 
-        if (carrito.length === 0) {
+    botonCheckout.addEventListener(
+        "click",
+        function() {
 
-            alert(
-                "Tu carrito está vacío."
-            );
 
-            return;
+            if (carrito.length === 0) {
+
+                alert(
+                    "Tu carrito está vacío."
+                );
+
+                return;
+
+            }
+
+
+            window.location.href =
+                "checkout.html";
 
         }
+    );
+
+}
 
 
-        window.location.href =
-            "checkout.html";
-
-    }
-);
-
-
-// ===============================
-// INICIAR
-// ===============================
+// ==========================================
+// INICIAR CARRITO
+// ==========================================
 
 mostrarCarrito();

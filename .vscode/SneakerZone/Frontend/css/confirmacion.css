@@ -1,0 +1,312 @@
+/* ==========================================
+   PÁGINA DE CONFIRMACIÓN
+========================================== */
+
+.confirmacion {
+
+    min-height: 70vh;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 80px 20px;
+
+}
+
+
+/* ==========================================
+   TARJETA
+========================================== */
+
+.tarjeta-confirmacion {
+
+    width: 100%;
+
+    max-width: 650px;
+
+    background: white;
+
+    padding: 60px 50px;
+
+    border-radius: 20px;
+
+    text-align: center;
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.08);
+
+}
+
+
+/* ==========================================
+   ICONO DE ÉXITO
+========================================== */
+
+.icono-confirmacion {
+
+    width: 90px;
+
+    height: 90px;
+
+    margin: 0 auto 30px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    background: #e63946;
+
+    color: white;
+
+    border-radius: 50%;
+
+    font-size: 45px;
+
+}
+
+
+/* ==========================================
+   TITULO
+========================================== */
+
+.tarjeta-confirmacion h1 {
+
+    font-size: 32px;
+
+    margin-bottom: 20px;
+
+}
+
+
+/* ==========================================
+   MENSAJE
+========================================== */
+
+.mensaje {
+
+    font-size: 20px;
+
+    margin-bottom: 15px;
+
+}
+
+.mensaje strong {
+
+    color: #e63946;
+
+}
+
+
+/* ==========================================
+   DESCRIPCIÓN
+========================================== */
+
+.descripcion {
+
+    color: #777;
+
+    line-height: 1.7;
+
+    margin-bottom: 30px;
+
+}
+
+
+/* ==========================================
+   NUMERO DE PEDIDO
+========================================== */
+
+.numero-pedido {
+
+    background: #f5f5f5;
+
+    padding: 20px;
+
+    border-radius: 10px;
+
+    margin-bottom: 35px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+}
+
+
+.numero-pedido span {
+
+    color: #777;
+
+    font-size: 14px;
+
+}
+
+
+.numero-pedido strong {
+
+    color: #e63946;
+
+    font-size: 22px;
+
+}
+
+
+/* ==========================================
+   BOTONES
+========================================== */
+
+.botones-confirmacion {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 15px;
+
+    flex-wrap: wrap;
+
+}
+
+
+/* BOTÓN PRINCIPAL */
+
+.btn-principal {
+
+    display: inline-block;
+
+    padding: 14px 30px;
+
+    background: #e63946;
+
+    color: white;
+
+    text-decoration: none;
+
+    border-radius: 8px;
+
+    font-weight: 600;
+
+    transition: 0.3s;
+
+}
+
+
+.btn-principal:hover {
+
+    background: #c1121f;
+
+    transform: translateY(-2px);
+
+}
+
+
+/* BOTÓN SECUNDARIO */
+
+.btn-secundario {
+
+    display: inline-block;
+
+    padding: 14px 30px;
+
+    background: #111;
+
+    color: white;
+
+    text-decoration: none;
+
+    border-radius: 8px;
+
+    font-weight: 600;
+
+    transition: 0.3s;
+
+}
+
+
+.btn-secundario:hover {
+
+    background: #333;
+
+    transform: translateY(-2px);
+
+}
+
+
+/* ==========================================
+   FOOTER
+========================================== */
+
+footer a {
+
+    color: white;
+
+    text-decoration: none;
+
+}
+
+
+footer a:hover {
+
+    color: #e63946;
+
+}
+
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 600px) {
+
+
+    .confirmacion {
+
+        padding: 50px 15px;
+
+    }
+
+
+    .tarjeta-confirmacion {
+
+        padding: 45px 25px;
+
+    }
+
+
+    .tarjeta-confirmacion h1 {
+
+        font-size: 26px;
+
+    }
+
+
+    .mensaje {
+
+        font-size: 18px;
+
+    }
+
+
+    .botones-confirmacion {
+
+        flex-direction: column;
+
+    }
+
+
+    .btn-principal,
+
+    .btn-secundario {
+
+        width: 100%;
+
+    }
+
+}
