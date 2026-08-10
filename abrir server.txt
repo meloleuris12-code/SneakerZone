@@ -1,0 +1,4 @@
+javac -cp "lib\mssql-jdbc-13.4.0.jre11.jar" -d out src\*.java
+
+java -cp "out;lib\mssql-jdbc-13.4.0.jre11.jar" Servidor
+
