@@ -2,9 +2,8 @@
 // OBTENER EL CARRITO
 // ==========================================
 
-const carrito = JSON.parse(
-    localStorage.getItem("carrito")
-) || [];
+const carrito =
+    JSON.parse(localStorage.getItem("carrito")) || [];
 
 
 // ==========================================
@@ -60,48 +59,43 @@ const costoEnvio = 10;
 
 metodosPago.forEach(function(metodo) {
 
-    metodo.addEventListener("change", function() {
+    metodo.addEventListener(
+        "change",
+        function() {
 
-        if (metodo.value === "tarjeta" && metodo.checked) {
+            if (
+                metodo.value === "tarjeta" &&
+                metodo.checked
+            ) {
 
-            datosTarjeta.style.display = "block";
+                datosTarjeta.style.display = "block";
 
-            numeroTarjeta.required = true;
+                numeroTarjeta.required = true;
+                titularTarjeta.required = true;
+                fechaExpiracion.required = true;
+                cvv.required = true;
 
-            titularTarjeta.required = true;
+            }
 
-            fechaExpiracion.required = true;
+            else if (
+                metodo.value === "efectivo" &&
+                metodo.checked
+            ) {
 
-            cvv.required = true;
+                datosTarjeta.style.display = "none";
 
+                numeroTarjeta.required = false;
+                titularTarjeta.required = false;
+                fechaExpiracion.required = false;
+                cvv.required = false;
+
+                numeroTarjeta.value = "";
+                titularTarjeta.value = "";
+                fechaExpiracion.value = "";
+                cvv.value = "";
+            }
         }
-
-        else if (
-            metodo.value === "efectivo" &&
-            metodo.checked
-        ) {
-
-            datosTarjeta.style.display = "none";
-
-            numeroTarjeta.required = false;
-
-            titularTarjeta.required = false;
-
-            fechaExpiracion.required = false;
-
-            cvv.required = false;
-
-            numeroTarjeta.value = "";
-
-            titularTarjeta.value = "";
-
-            fechaExpiracion.value = "";
-
-            cvv.value = "";
-
-        }
-
-    });
+    );
 
 });
 
@@ -116,23 +110,22 @@ numeroTarjeta.addEventListener(
 
         let valor =
             numeroTarjeta.value
-            .replace(/\D/g, "")
-            .substring(0, 16);
+                .replace(/\D/g, "")
+                .substring(0, 16);
 
         let grupos =
             valor.match(/.{1,4}/g);
 
         numeroTarjeta.value =
             grupos
-            ? grupos.join(" ")
-            : "";
-
+                ? grupos.join(" ")
+                : "";
     }
 );
 
 
 // ==========================================
-// FORMATEAR FECHA DE EXPIRACIÓN
+// FORMATEAR FECHA
 // ==========================================
 
 fechaExpiracion.addEventListener(
@@ -141,8 +134,8 @@ fechaExpiracion.addEventListener(
 
         let valor =
             fechaExpiracion.value
-            .replace(/\D/g, "")
-            .substring(0, 4);
+                .replace(/\D/g, "")
+                .substring(0, 4);
 
         if (valor.length >= 3) {
 
@@ -150,17 +143,15 @@ fechaExpiracion.addEventListener(
                 valor.substring(0, 2) +
                 "/" +
                 valor.substring(2);
-
         }
 
         fechaExpiracion.value = valor;
-
     }
 );
 
 
 // ==========================================
-// PERMITIR SOLO NÚMEROS EN CVV
+// VALIDAR CVV
 // ==========================================
 
 cvv.addEventListener(
@@ -169,9 +160,8 @@ cvv.addEventListener(
 
         cvv.value =
             cvv.value
-            .replace(/\D/g, "")
-            .substring(0, 4);
-
+                .replace(/\D/g, "")
+                .substring(0, 4);
     }
 );
 
@@ -187,7 +177,9 @@ function mostrarProductos() {
     let subtotal = 0;
 
 
-    // Verificar si el carrito está vacío
+    // ==========================================
+    // CARRITO VACÍO
+    // ==========================================
 
     if (carrito.length === 0) {
 
@@ -207,23 +199,19 @@ function mostrarProductos() {
             "US$ 0";
 
         return;
-
     }
 
 
-    // Recorrer productos
+    // ==========================================
+    // MOSTRAR PRODUCTOS
+    // ==========================================
 
     carrito.forEach(function(producto) {
 
-
-        // Calcular subtotal
-
         subtotal +=
-            producto.precio *
-            producto.cantidad;
+            Number(producto.precio) *
+            Number(producto.cantidad);
 
-
-        // Crear elemento
 
         const productoHTML =
             document.createElement("div");
@@ -258,19 +246,20 @@ function mostrarProductos() {
 
             <span class="precio-checkout">
 
-                US$ ${(producto.precio * producto.cantidad).toFixed(2)}
+                US$ ${
+                    (
+                        Number(producto.precio) *
+                        Number(producto.cantidad)
+                    ).toFixed(2)
+                }
 
             </span>
-
         `;
 
-
-        // Agregar producto
 
         contenedorProductos.appendChild(
             productoHTML
         );
-
     });
 
 
@@ -278,31 +267,27 @@ function mostrarProductos() {
     // CALCULAR TOTAL
     // ==========================================
 
-    let envio = costoEnvio;
+    const envio = costoEnvio;
 
-    let total =
-        subtotal +
-        envio;
+    const total =
+        subtotal + envio;
 
 
     // ==========================================
-    // MOSTRAR VALORES
+    // MOSTRAR TOTALES
     // ==========================================
 
     subtotalElemento.textContent =
         "US$ " +
         subtotal.toFixed(2);
 
-
     envioElemento.textContent =
         "US$ " +
         envio.toFixed(2);
 
-
     totalElemento.textContent =
         "US$ " +
         total.toFixed(2);
-
 }
 
 
@@ -318,9 +303,7 @@ const formulario =
 
 formulario.addEventListener(
     "submit",
-    function(event) {
-
-        // Evitar recargar la página
+    async function(event) {
 
         event.preventDefault();
 
@@ -336,7 +319,6 @@ formulario.addEventListener(
             );
 
             return;
-
         }
 
 
@@ -357,12 +339,11 @@ formulario.addEventListener(
             );
 
             return;
-
         }
 
 
         // ==========================================
-        // VALIDAR DATOS DE TARJETA
+        // VALIDAR TARJETA
         // ==========================================
 
         if (
@@ -372,7 +353,7 @@ formulario.addEventListener(
 
             const numero =
                 numeroTarjeta.value
-                .replace(/\s/g, "");
+                    .replace(/\s/g, "");
 
 
             if (numero.length !== 16) {
@@ -384,7 +365,6 @@ formulario.addEventListener(
                 numeroTarjeta.focus();
 
                 return;
-
             }
 
 
@@ -399,7 +379,6 @@ formulario.addEventListener(
                 titularTarjeta.focus();
 
                 return;
-
             }
 
 
@@ -414,7 +393,6 @@ formulario.addEventListener(
                 fechaExpiracion.focus();
 
                 return;
-
             }
 
 
@@ -429,60 +407,237 @@ formulario.addEventListener(
                 cvv.focus();
 
                 return;
-
             }
-
         }
 
 
         // ==========================================
-        // OBTENER DATOS DEL CLIENTE
+        // OBTENER USUARIO
         // ==========================================
 
-        const nombre =
-            document.getElementById(
-                "nombre"
-            ).value;
+        const usuarioGuardado =
+            localStorage.getItem("usuario");
 
-        const correo =
-            document.getElementById(
-                "correo"
-            ).value;
+
+        if (!usuarioGuardado) {
+
+            alert(
+                "Debes iniciar sesión antes de realizar un pedido."
+            );
+
+            window.location.href =
+                "login.html";
+
+            return;
+        }
 
 
         // ==========================================
-        // MENSAJE DE CONFIRMACIÓN
+        // CONVERTIR USUARIO
         // ==========================================
 
-        alert(
-            "¡Gracias por tu compra, " +
-            nombre +
-            "!"
+        let usuario;
+
+        try {
+
+            usuario =
+                JSON.parse(usuarioGuardado);
+
+        } catch (error) {
+
+            console.error(
+                "Error al obtener usuario:",
+                error
+            );
+
+            alert(
+                "No se pudo obtener la información del usuario."
+            );
+
+            return;
+        }
+
+
+        // ==========================================
+        // VERIFICAR ID DEL CLIENTE
+        // ==========================================
+
+        if (!usuario.id_cliente) {
+
+            alert(
+                "No se encontró el ID del cliente. Inicia sesión nuevamente."
+            );
+
+            return;
+        }
+
+
+        // ==========================================
+        // CALCULAR SUBTOTAL
+        // ==========================================
+
+        let subtotal = 0;
+
+        carrito.forEach(function(producto) {
+
+            subtotal +=
+                Number(producto.precio) *
+                Number(producto.cantidad);
+
+        });
+
+
+        // ==========================================
+        // CALCULAR TOTAL
+        // ==========================================
+
+        const total =
+            subtotal + costoEnvio;
+
+
+        // ==========================================
+        // PREPARAR PRODUCTOS
+        // ==========================================
+
+        const productosPedido =
+            carrito.map(function(producto) {
+
+                return {
+
+                    id_producto:
+                        Number(producto.id_producto),
+
+                    cantidad:
+                        Number(producto.cantidad),
+
+                    precio:
+                        Number(producto.precio)
+
+                };
+
+            });
+
+
+        // ==========================================
+        // CREAR PEDIDO
+        // ==========================================
+
+        const pedido = {
+
+            id_cliente:
+                Number(usuario.id_cliente),
+
+            total:
+                total,
+
+            metodo_pago:
+                metodoSeleccionado.value,
+
+            productos:
+                productosPedido
+        };
+
+
+        console.log(
+            "Enviando pedido:",
+            pedido
         );
 
 
         // ==========================================
-        // LIMPIAR CARRITO
+        // ENVIAR AL SERVIDOR JAVA
         // ==========================================
 
-        localStorage.removeItem(
-            "carrito"
-        );
+        try {
+
+            const respuesta =
+                await fetch(
+                    "http://localhost:8080/pedido",
+                    {
+
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify(pedido)
+                    }
+                );
 
 
-        // ==========================================
-        // IR A CONFIRMACIÓN
-        // ==========================================
+            const resultado =
+                await respuesta.json();
 
-        window.location.href =
-            "confirmacion.html";
+
+            console.log(
+                "Respuesta del servidor:",
+                resultado
+            );
+
+
+            // ==========================================
+            // PEDIDO REGISTRADO
+            // ==========================================
+
+            if (respuesta.ok) {
+
+                alert(
+                    "¡Gracias por tu compra, " +
+                    usuario.nombre +
+                    "! Pedido #" +
+                    resultado.id_pedido +
+                    " registrado correctamente."
+                );
+
+
+                // ==========================================
+                // LIMPIAR CARRITO
+                // ==========================================
+
+                localStorage.removeItem(
+                    "carrito"
+                );
+
+
+                // ==========================================
+                // IR A CONFIRMACIÓN
+                // ==========================================
+
+                window.location.href =
+                    "confirmacion.html";
+
+            }
+
+            else {
+
+                alert(
+                    resultado.mensaje ||
+                    "No se pudo registrar el pedido."
+                );
+            }
+
+
+        } catch (error) {
+
+            console.error(
+                "Error al enviar el pedido:",
+                error
+            );
+
+            alert(
+                "No se pudo conectar con el servidor. Verifica que el servidor Java esté encendido."
+            );
+        }
 
     }
 );
 
 
 // ==========================================
-// EJECUTAR AL CARGAR LA PÁGINA
+// EJECUTAR AL CARGAR
 // ==========================================
 
 mostrarProductos();

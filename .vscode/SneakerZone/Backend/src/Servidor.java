@@ -44,15 +44,38 @@ public class Servidor {
         );
 
         // ==========================================
+        // ENDPOINT DE PEDIDOS
+        // ==========================================
+
+        servidor.createContext(
+                "/pedido",
+                Servidor::registrarPedido
+        );
+
+        // ==========================================
+        // ENDPOINT DE HISTORIAL DE PEDIDOS
+        // ==========================================
+
+        servidor.createContext(
+                "/pedidos",
+                Servidor::obtenerPedidosCliente
+        );
+
+        // ==========================================
         // INICIAR SERVIDOR
         // ==========================================
 
         servidor.start();
 
+        System.out.println("==========================================");
         System.out.println("Servidor SneakerZone iniciado.");
+        System.out.println("==========================================");
         System.out.println("Productos: http://localhost:8080/productos");
-        System.out.println("Registro: http://localhost:8080/registro");
-        System.out.println("Login: http://localhost:8080/login");
+        System.out.println("Registro:  http://localhost:8080/registro");
+        System.out.println("Login:     http://localhost:8080/login");
+        System.out.println("Pedido:    http://localhost:8080/pedido");
+        System.out.println("Pedidos:   http://localhost:8080/pedidos?id_cliente=1");
+        System.out.println("==========================================");
     }
 
     // ==========================================
@@ -65,9 +88,7 @@ public class Servidor {
         if (exchange.getRequestMethod().equalsIgnoreCase("OPTIONS")) {
 
             agregarCORS(exchange);
-
             exchange.sendResponseHeaders(204, -1);
-
             return;
         }
 
@@ -136,28 +157,208 @@ public class Servidor {
     }
 
     // ==========================================
-    // REGISTRAR CLIENTE
+    // OBTENER PEDIDOS DE UN CLIENTE
     // ==========================================
+    //
+    // GET /pedidos?id_cliente=1
+    //
+    // Devuelve el historial de pedidos del cliente,
+    // cada uno con su lista de productos, para mostrar
+    // el seguimiento en la sección "Mi cuenta".
 
-    private static void registrarCliente(
+    private static void obtenerPedidosCliente(
             HttpExchange exchange) throws IOException {
-
-        // ==========================================
-        // CORS - PRE-FLIGHT
-        // ==========================================
 
         if (exchange.getRequestMethod().equalsIgnoreCase("OPTIONS")) {
 
             agregarCORS(exchange);
-
             exchange.sendResponseHeaders(204, -1);
+            return;
+        }
+
+        if (!exchange.getRequestMethod().equalsIgnoreCase("GET")) {
+
+            enviarJSON(
+                    exchange,
+                    405,
+                    "{\"mensaje\":\"Método no permitido\"}"
+            );
 
             return;
         }
 
         // ==========================================
-        // VERIFICAR POST
+        // LEER id_cliente DE LA URL
         // ==========================================
+
+        String consulta =
+                exchange.getRequestURI().getQuery();
+
+        String idClienteTexto =
+                obtenerParametro(consulta, "id_cliente");
+
+        if (idClienteTexto == null || idClienteTexto.isEmpty()) {
+
+            enviarJSON(
+                    exchange,
+                    400,
+                    "{\"mensaje\":\"Falta el parámetro id_cliente\"}"
+            );
+
+            return;
+        }
+
+        int idCliente;
+
+        try {
+
+            idCliente = Integer.parseInt(idClienteTexto);
+
+        } catch (NumberFormatException e) {
+
+            enviarJSON(
+                    exchange,
+                    400,
+                    "{\"mensaje\":\"id_cliente no es válido\"}"
+            );
+
+            return;
+        }
+
+        // ==========================================
+        // CONSULTAR PEDIDOS
+        // ==========================================
+
+        List<Pedido> pedidos =
+                Pedido.obtenerPorCliente(idCliente);
+
+        // ==========================================
+        // ARMAR JSON DE RESPUESTA
+        // ==========================================
+
+        StringBuilder json = new StringBuilder();
+
+        json.append("[");
+
+        for (int i = 0; i < pedidos.size(); i++) {
+
+            Pedido pedido = pedidos.get(i);
+
+            json.append("{");
+
+            json.append("\"id_pedido\":")
+                    .append(pedido.getIdPedido())
+                    .append(",");
+
+            json.append("\"fecha_pedido\":\"")
+                    .append(escaparJSON(pedido.getFechaPedido()))
+                    .append("\",");
+
+            json.append("\"total\":")
+                    .append(pedido.getTotal())
+                    .append(",");
+
+            json.append("\"estado\":\"")
+                    .append(escaparJSON(pedido.getEstado()))
+                    .append("\",");
+
+            json.append("\"productos\":[");
+
+            List<DetallePedido> detalles =
+                    pedido.getDetalles();
+
+            for (int j = 0; j < detalles.size(); j++) {
+
+                DetallePedido detalle = detalles.get(j);
+
+                json.append("{");
+
+                json.append("\"id_producto\":")
+                        .append(detalle.getIdProducto())
+                        .append(",");
+
+                json.append("\"nombre\":\"")
+                        .append(escaparJSON(detalle.getNombreProducto()))
+                        .append("\",");
+
+                json.append("\"cantidad\":")
+                        .append(detalle.getCantidad())
+                        .append(",");
+
+                json.append("\"precio_unitario\":")
+                        .append(detalle.getPrecioUnitario())
+                        .append(",");
+
+                json.append("\"subtotal\":")
+                        .append(detalle.getSubtotal());
+
+                json.append("}");
+
+                if (j < detalles.size() - 1) {
+                    json.append(",");
+                }
+            }
+
+            json.append("]");
+
+            json.append("}");
+
+            if (i < pedidos.size() - 1) {
+                json.append(",");
+            }
+        }
+
+        json.append("]");
+
+        enviarJSON(
+                exchange,
+                200,
+                json.toString()
+        );
+    }
+
+    // ==========================================
+    // OBTENER PARÁMETRO DE QUERY STRING
+    // ==========================================
+    //
+    // Ejemplo: "id_cliente=1&otro=2" -> obtenerParametro(txt, "id_cliente") -> "1"
+
+    private static String obtenerParametro(
+            String query,
+            String nombre) {
+
+        if (query == null || query.isEmpty()) {
+            return null;
+        }
+
+        String[] pares = query.split("&");
+
+        for (String par : pares) {
+
+            String[] partes = par.split("=", 2);
+
+            if (
+                    partes.length == 2
+                    &&
+                    partes[0].equals(nombre)
+            ) {
+
+                return partes[1];
+            }
+        }
+
+        return null;
+    }
+
+    private static void registrarCliente(
+            HttpExchange exchange) throws IOException {
+
+        if (exchange.getRequestMethod().equalsIgnoreCase("OPTIONS")) {
+
+            agregarCORS(exchange);
+            exchange.sendResponseHeaders(204, -1);
+            return;
+        }
 
         if (!exchange.getRequestMethod().equalsIgnoreCase("POST")) {
 
@@ -170,10 +371,6 @@ public class Servidor {
             return;
         }
 
-        // ==========================================
-        // LEER DATOS
-        // ==========================================
-
         String datos = new String(
                 exchange.getRequestBody().readAllBytes(),
                 StandardCharsets.UTF_8
@@ -183,43 +380,12 @@ public class Servidor {
                 "Datos recibidos en registro: " + datos
         );
 
-        // ==========================================
-        // OBTENER DATOS
-        // ==========================================
-
-        String nombre = obtenerDato(
-                datos,
-                "nombre"
-        );
-
-        String apellido = obtenerDato(
-                datos,
-                "apellido"
-        );
-
-        String telefono = obtenerDato(
-                datos,
-                "telefono"
-        );
-
-        String correo = obtenerDato(
-                datos,
-                "correo"
-        );
-
-        String direccion = obtenerDato(
-                datos,
-                "direccion"
-        );
-
-        String contraseña = obtenerDato(
-                datos,
-                "contraseña"
-        );
-
-        // ==========================================
-        // VALIDAR DATOS
-        // ==========================================
+        String nombre = obtenerDato(datos, "nombre");
+        String apellido = obtenerDato(datos, "apellido");
+        String telefono = obtenerDato(datos, "telefono");
+        String correo = obtenerDato(datos, "correo");
+        String direccion = obtenerDato(datos, "direccion");
+        String contraseña = obtenerDato(datos, "contraseña");
 
         if (
                 nombre.isEmpty() ||
@@ -239,10 +405,6 @@ public class Servidor {
             return;
         }
 
-        // ==========================================
-        // VERIFICAR SI EL CORREO YA EXISTE
-        // ==========================================
-
         Cliente cliente = Cliente.buscarPorCorreo(correo);
 
         if (cliente != null) {
@@ -256,10 +418,6 @@ public class Servidor {
             return;
         }
 
-        // ==========================================
-        // CREAR CLIENTE
-        // ==========================================
-
         Cliente nuevoCliente = new Cliente(
                 nombre,
                 apellido,
@@ -268,10 +426,6 @@ public class Servidor {
                 direccion,
                 contraseña
         );
-
-        // ==========================================
-        // GUARDAR CLIENTE
-        // ==========================================
 
         boolean registrado = nuevoCliente.registrar();
 
@@ -294,28 +448,18 @@ public class Servidor {
     }
 
     // ==========================================
-    // INICIAR SESIÓN
+    // LOGIN
     // ==========================================
 
     private static void iniciarSesion(
             HttpExchange exchange) throws IOException {
 
-        // ==========================================
-        // CORS - PRE-FLIGHT
-        // ==========================================
-
         if (exchange.getRequestMethod().equalsIgnoreCase("OPTIONS")) {
 
             agregarCORS(exchange);
-
             exchange.sendResponseHeaders(204, -1);
-
             return;
         }
-
-        // ==========================================
-        // VERIFICAR POST
-        // ==========================================
 
         if (!exchange.getRequestMethod().equalsIgnoreCase("POST")) {
 
@@ -328,10 +472,6 @@ public class Servidor {
             return;
         }
 
-        // ==========================================
-        // LEER DATOS
-        // ==========================================
-
         String datos = new String(
                 exchange.getRequestBody().readAllBytes(),
                 StandardCharsets.UTF_8
@@ -340,10 +480,6 @@ public class Servidor {
         System.out.println(
                 "Intento de login: " + datos
         );
-
-        // ==========================================
-        // OBTENER CORREO Y CONTRASEÑA
-        // ==========================================
 
         String correo = obtenerDato(
                 datos,
@@ -354,10 +490,6 @@ public class Servidor {
                 datos,
                 "contraseña"
         );
-
-        // ==========================================
-        // VALIDAR
-        // ==========================================
 
         if (
                 correo.isEmpty() ||
@@ -373,18 +505,10 @@ public class Servidor {
             return;
         }
 
-        // ==========================================
-        // BUSCAR CLIENTE
-        // ==========================================
-
         Cliente cliente = Cliente.iniciarSesion(
                 correo,
                 contraseña
         );
-
-        // ==========================================
-        // LOGIN CORRECTO
-        // ==========================================
 
         if (cliente != null) {
 
@@ -418,16 +542,309 @@ public class Servidor {
 
         } else {
 
-            // ==========================================
-            // LOGIN INCORRECTO
-            // ==========================================
-
             enviarJSON(
                     exchange,
                     401,
                     "{\"mensaje\":\"Correo o contraseña incorrectos\"}"
             );
         }
+    }
+
+    // ==========================================
+    // REGISTRAR PEDIDO
+    // ==========================================
+
+    private static void registrarPedido(
+            HttpExchange exchange) throws IOException {
+
+        // ==========================================
+        // CORS
+        // ==========================================
+
+        if (exchange.getRequestMethod().equalsIgnoreCase("OPTIONS")) {
+
+            agregarCORS(exchange);
+            exchange.sendResponseHeaders(204, -1);
+            return;
+        }
+
+        // ==========================================
+        // VERIFICAR POST
+        // ==========================================
+
+        if (!exchange.getRequestMethod().equalsIgnoreCase("POST")) {
+
+            enviarJSON(
+                    exchange,
+                    405,
+                    "{\"mensaje\":\"Método no permitido\"}"
+            );
+
+            return;
+        }
+
+        // ==========================================
+        // LEER JSON
+        // ==========================================
+
+        String datos = new String(
+                exchange.getRequestBody().readAllBytes(),
+                StandardCharsets.UTF_8
+        );
+
+        System.out.println(
+                "=========================================="
+        );
+
+        System.out.println(
+                "Pedido recibido:"
+        );
+
+        System.out.println(datos);
+
+        // ==========================================
+        // DATOS DEL PEDIDO
+        // ==========================================
+
+        String idClienteTexto =
+                obtenerDato(datos, "id_cliente");
+
+        String totalTexto =
+                obtenerDato(datos, "total");
+
+        String metodoPago =
+                obtenerDato(datos, "metodo_pago");
+
+        // ==========================================
+        // VALIDAR DATOS
+        // ==========================================
+
+        if (
+                idClienteTexto.isEmpty() ||
+                totalTexto.isEmpty() ||
+                metodoPago.isEmpty()
+        ) {
+
+            enviarJSON(
+                    exchange,
+                    400,
+                    "{\"mensaje\":\"Faltan datos del pedido\"}"
+            );
+
+            return;
+        }
+
+        int idCliente;
+
+        double total;
+
+        try {
+
+            idCliente =
+                    Integer.parseInt(idClienteTexto);
+
+            total =
+                    Double.parseDouble(totalTexto);
+
+        } catch (NumberFormatException e) {
+
+            enviarJSON(
+                    exchange,
+                    400,
+                    "{\"mensaje\":\"Los datos numéricos del pedido no son válidos\"}"
+            );
+
+            return;
+        }
+
+        // ==========================================
+        // CREAR PEDIDO
+        // ==========================================
+
+        Pedido pedido = new Pedido(
+                idCliente,
+                total,
+                "Pendiente"
+        );
+
+        boolean pedidoRegistrado =
+                pedido.registrar();
+
+        if (!pedidoRegistrado) {
+
+            enviarJSON(
+                    exchange,
+                    500,
+                    "{\"mensaje\":\"No se pudo registrar el pedido\"}"
+            );
+
+            return;
+        }
+
+        // ==========================================
+        // OBTENER ID DEL PEDIDO
+        // ==========================================
+
+        int idPedido =
+                pedido.getIdPedido();
+
+        System.out.println(
+                "Pedido creado. ID: " + idPedido
+        );
+
+        // ==========================================
+        // OBTENER PRODUCTOS
+        // ==========================================
+
+        String productos =
+                obtenerArray(datos, "productos");
+
+        if (productos.isEmpty()) {
+
+            enviarJSON(
+                    exchange,
+                    400,
+                    "{\"mensaje\":\"El pedido no contiene productos\"}"
+            );
+
+            return;
+        }
+
+        // ==========================================
+        // REGISTRAR DETALLES
+        // ==========================================
+
+        String[] listaProductos =
+                separarProductos(productos);
+
+        for (String productoJSON : listaProductos) {
+
+            if (productoJSON.trim().isEmpty()) {
+                continue;
+            }
+
+            // ==========================================
+            // TRY/CATCH DE SEGURIDAD
+            // ==========================================
+            //
+            // Si algún producto llega con datos inválidos
+            // o incompletos (por ejemplo id_producto en null),
+            // se omite ese producto en lugar de detener
+            // todo el procesamiento del pedido y cortar
+            // la conexión sin responder al cliente.
+
+            try {
+
+                String idProductoTexto =
+                        obtenerDato(
+                                productoJSON,
+                                "id_producto"
+                        );
+
+                String cantidadTexto =
+                        obtenerDato(
+                                productoJSON,
+                                "cantidad"
+                        );
+
+                String precioTexto =
+                        obtenerDato(
+                                productoJSON,
+                                "precio"
+                        );
+
+                if (
+                        idProductoTexto.isEmpty() ||
+                        idProductoTexto.equals("null") ||
+                        cantidadTexto.isEmpty() ||
+                        precioTexto.isEmpty()
+                ) {
+
+                    System.out.println(
+                            "Producto con datos incompletos, se omite: "
+                            + productoJSON
+                    );
+
+                    continue;
+                }
+
+                int idProducto =
+                        Integer.parseInt(idProductoTexto);
+
+                int cantidad =
+                        Integer.parseInt(cantidadTexto);
+
+                double precio =
+                        Double.parseDouble(precioTexto);
+
+                DetallePedido detalle =
+                        new DetallePedido(
+                                idPedido,
+                                idProducto,
+                                cantidad,
+                                precio
+                        );
+
+                boolean detalleRegistrado =
+                        detalle.registrar();
+
+                if (!detalleRegistrado) {
+
+                    System.out.println(
+                            "No se pudo registrar el detalle del producto: "
+                            + idProducto
+                    );
+                }
+
+            } catch (NumberFormatException e) {
+
+                System.out.println(
+                        "Producto con datos numéricos inválidos, se omite: "
+                        + productoJSON
+                );
+            }
+        }
+
+        // ==========================================
+        // REGISTRAR PAGO
+        // ==========================================
+
+        String estadoPago = "Pendiente";
+
+        pago nuevoPago = new pago(
+                idPedido,
+                metodoPago,
+                total,
+                estadoPago
+        );
+
+        boolean pagoRegistrado =
+                nuevoPago.registrar();
+
+        if (!pagoRegistrado) {
+
+            System.out.println(
+                    "Advertencia: el pedido fue registrado, "
+                    + "pero el pago no pudo registrarse."
+            );
+        }
+
+        // ==========================================
+        // RESPUESTA
+        // ==========================================
+
+        String respuesta =
+                "{"
+                + "\"mensaje\":\"Pedido registrado correctamente\","
+                + "\"id_pedido\":"
+                + idPedido
+                + "}";
+
+        enviarJSON(
+                exchange,
+                200,
+                respuesta
+        );
     }
 
     // ==========================================
@@ -438,44 +855,172 @@ public class Servidor {
             String datos,
             String campo) {
 
-        String buscar = "\"" + campo + "\"";
+        String buscar =
+                "\"" + campo + "\"";
 
-        int posicion = datos.indexOf(buscar);
+        int posicion =
+                datos.indexOf(buscar);
 
         if (posicion == -1) {
             return "";
         }
 
-        int inicio = datos.indexOf(
-                ":",
-                posicion
-        );
+        int inicio =
+                datos.indexOf(
+                        ":",
+                        posicion
+                );
 
         if (inicio == -1) {
             return "";
         }
 
-        int primerComilla = datos.indexOf(
-                "\"",
-                inicio
-        );
+        int primerCaracter =
+                inicio + 1;
 
-        if (primerComilla == -1) {
-            return "";
+        while (
+                primerCaracter < datos.length()
+                &&
+                Character.isWhitespace(
+                        datos.charAt(primerCaracter)
+                )
+        ) {
+
+            primerCaracter++;
         }
 
-        int segundaComilla = datos.indexOf(
-                "\"",
-                primerComilla + 1
-        );
+        // ==========================================
+        // DATO CON COMILLAS
+        // ==========================================
 
-        if (segundaComilla == -1) {
-            return "";
+        if (
+                primerCaracter < datos.length()
+                &&
+                datos.charAt(primerCaracter) == '"'
+        ) {
+
+            int primeraComilla =
+                    primerCaracter;
+
+            int segundaComilla =
+                    datos.indexOf(
+                            "\"",
+                            primeraComilla + 1
+                    );
+
+            if (segundaComilla == -1) {
+                return "";
+            }
+
+            return datos.substring(
+                    primeraComilla + 1,
+                    segundaComilla
+            );
+        }
+
+        // ==========================================
+        // DATO NUMÉRICO
+        // ==========================================
+
+        int fin =
+                primerCaracter;
+
+        while (
+                fin < datos.length()
+                &&
+                datos.charAt(fin) != ','
+                &&
+                datos.charAt(fin) != '}'
+                &&
+                datos.charAt(fin) != ']'
+        ) {
+
+            fin++;
         }
 
         return datos.substring(
-                primerComilla + 1,
-                segundaComilla
+                primerCaracter,
+                fin
+        ).trim();
+    }
+
+    // ==========================================
+    // OBTENER ARRAY DEL JSON
+    // ==========================================
+
+    private static String obtenerArray(
+            String datos,
+            String campo) {
+
+        String buscar =
+                "\"" + campo + "\"";
+
+        int posicion =
+                datos.indexOf(buscar);
+
+        if (posicion == -1) {
+            return "";
+        }
+
+        int inicio =
+                datos.indexOf(
+                        "[",
+                        posicion
+                );
+
+        if (inicio == -1) {
+            return "";
+        }
+
+        int nivel = 0;
+
+        for (
+                int i = inicio;
+                i < datos.length();
+                i++
+        ) {
+
+            char caracter =
+                    datos.charAt(i);
+
+            if (caracter == '[') {
+                nivel++;
+            }
+
+            if (caracter == ']') {
+
+                nivel--;
+
+                if (nivel == 0) {
+
+                    return datos.substring(
+                            inicio + 1,
+                            i
+                    );
+                }
+            }
+        }
+
+        return "";
+    }
+
+    // ==========================================
+    // SEPARAR PRODUCTOS
+    // ==========================================
+
+    private static String[] separarProductos(
+            String productos) {
+
+        if (
+                productos == null ||
+                productos.trim().isEmpty()
+        ) {
+
+            return new String[0];
+        }
+
+        return productos.split(
+                "\\},\\s*\\{"
         );
     }
 
@@ -498,7 +1043,7 @@ public class Servidor {
     }
 
     // ==========================================
-    // AGREGAR CORS
+    // CORS
     // ==========================================
 
     private static void agregarCORS(
@@ -534,9 +1079,10 @@ public class Servidor {
 
         agregarCORS(exchange);
 
-        byte[] respuesta = contenido.getBytes(
-                StandardCharsets.UTF_8
-        );
+        byte[] respuesta =
+                contenido.getBytes(
+                        StandardCharsets.UTF_8
+                );
 
         exchange.getResponseHeaders()
                 .set(
@@ -559,7 +1105,7 @@ public class Servidor {
     }
 
     // ==========================================
-    // ENVIAR RESPUESTA DE TEXTO
+    // ENVIAR TEXTO
     // ==========================================
 
     private static void enviarRespuesta(
@@ -569,9 +1115,10 @@ public class Servidor {
 
         agregarCORS(exchange);
 
-        byte[] respuesta = mensaje.getBytes(
-                StandardCharsets.UTF_8
-        );
+        byte[] respuesta =
+                mensaje.getBytes(
+                        StandardCharsets.UTF_8
+                );
 
         exchange.getResponseHeaders()
                 .set(

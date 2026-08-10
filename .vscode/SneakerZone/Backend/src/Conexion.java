@@ -4,66 +4,72 @@ import java.sql.SQLException;
 
 public class Conexion {
 
-    private static final String URL =
-            "jdbc:sqlserver://LEURYPC:1433;"
-            + "databaseName=Tienda;"
-            + "integratedSecurity=true;"
-            + "encrypt=true;"
-            + "trustServerCertificate=true";
 
-    public static Connection conectar() {
+private static final String URL =
+        "jdbc:sqlserver://LEURYPC:1433;"
+        + "databaseName=Tienda;"
+        + "encrypt=true;"
+        + "trustServerCertificate=true";
 
-        try {
+private static final String USUARIO = "sneakerzone";
 
-            Class.forName(
+private static final String CONTRASEÑA = "SneakerZone2026!";
+
+public static Connection conectar() {
+
+    try {
+
+        Class.forName(
                 "com.microsoft.sqlserver.jdbc.SQLServerDriver"
-            );
+        );
 
-            Connection conexion =
-                DriverManager.getConnection(URL);
+        Connection conexion =
+                DriverManager.getConnection(
+                        URL,
+                        USUARIO,
+                        CONTRASEÑA
+                );
 
-            System.out.println(
+        System.out.println(
                 "Conexión exitosa a la base de datos Tienda."
-            );
+        );
 
-            return conexion;
+        return conexion;
 
-        } catch (ClassNotFoundException e) {
+    } catch (ClassNotFoundException e) {
 
-            System.out.println(
+        System.out.println(
                 "No se encontró el driver JDBC."
-            );
+        );
 
-            e.printStackTrace();
+        e.printStackTrace();
 
-            return null;
+        return null;
 
-        } catch (SQLException e) {
+    } catch (SQLException e) {
 
-            System.out.println(
+        System.out.println(
                 "Error al conectar con la base de datos."
-            );
+        );
 
-            e.printStackTrace();
+        e.printStackTrace();
 
-            return null;
-
-        }
-
+        return null;
     }
+}
 
-    public static void main(String[] args) {
+public static void main(String[] args) {
 
-        Connection conexion = conectar();
+    Connection conexion = conectar();
 
-        if (conexion != null) {
+    if (conexion != null) {
 
-            System.out.println(
+        System.out.println(
                 "SneakerZone está conectado a SQL Server."
-            );
-
-        }
+        );
 
     }
+}
+
 
 }

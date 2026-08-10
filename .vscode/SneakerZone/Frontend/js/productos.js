@@ -127,6 +127,14 @@ function mostrarProductos(productos) {
                 );
 
 
+            // Guardar el ID real del producto (viene de la base de datos)
+            // Se usa después al agregarlo al carrito, para poder
+            // registrar el pedido correctamente en el servidor.
+
+            tarjeta.dataset.idProducto =
+                producto.id_producto;
+
+
             tarjeta.innerHTML = `
 
                 <img
@@ -562,9 +570,19 @@ function activarBotonesCarrito() {
                         );
 
 
+                    // Obtener ID real del producto
+                    // (guardado en el dataset de la tarjeta)
+
+                    const idProducto =
+                        tarjeta.dataset.idProducto;
+
+
                     // Crear producto
 
                     const producto = {
+
+                        id_producto:
+                            idProducto,
 
                         nombre:
                             nombre,

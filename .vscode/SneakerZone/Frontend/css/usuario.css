@@ -1,46 +1,52 @@
 .perfil-container {
-min-height: 70vh;
-display: flex;
-justify-content: center;
-align-items: center;
+display: grid;
+grid-template-columns: 320px 1fr;
+align-items: start;
+gap: 30px;
+max-width: 1100px;
+margin: 0 auto;
 padding: 60px 20px;
 box-sizing: border-box;
 }
 
 .perfil-card {
 width: 100%;
-max-width: 600px;
 background-color: #ffffff;
-padding: 40px;
+padding: 35px 30px;
 border-radius: 15px;
 box-shadow: 0 5px 25px rgba(0, 0, 0, 0.10);
 box-sizing: border-box;
+
+/* Se queda visible al hacer scroll, ya que el
+   contenido de pedidos puede ser más largo */
+position: sticky;
+top: 100px;
 }
 
 .perfil-icono {
-width: 90px;
-height: 90px;
-margin: 0 auto 20px;
+width: 75px;
+height: 75px;
+margin: 0 auto 18px;
 border-radius: 50%;
 background-color: #111111;
 color: #ffffff;
 display: flex;
 align-items: center;
 justify-content: center;
-font-size: 38px;
+font-size: 32px;
 }
 
 .perfil-card h1 {
-margin: 0 0 10px 0;
+margin: 0 0 8px 0;
 text-align: center;
-font-size: 28px;
+font-size: 22px;
 }
 
 .perfil-card .bienvenida {
-margin: 0 0 30px 0;
+margin: 0 0 25px 0;
 text-align: center;
 color: #777777;
-font-size: 15px;
+font-size: 13px;
 }
 
 .datos-usuario {
@@ -107,6 +113,23 @@ transition: background-color 0.3s ease;
 background-color: #333333;
 }
 
+/* ==========================================
+   RESPONSIVE - TABLET (apilar columnas)
+========================================== */
+
+@media (max-width: 900px) {
+
+.perfil-container {
+    grid-template-columns: 1fr;
+    max-width: 700px;
+}
+
+.perfil-card {
+    position: static;
+}
+
+}
+
 @media (max-width: 600px) {
 
 
@@ -130,5 +153,302 @@ background-color: #333333;
     font-size: 14px;
 }
 
+
+}
+
+
+/* ==========================================
+   SECCIÓN "MIS PEDIDOS"
+========================================== */
+
+.pedidos-card {
+    width: 100%;
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.10);
+    box-sizing: border-box;
+}
+
+.titulo-pedidos {
+    font-size: 24px;
+    margin-bottom: 6px;
+    color: #111111;
+}
+
+.subtitulo-pedidos {
+    color: #777777;
+    font-size: 14px;
+    margin-bottom: 25px;
+}
+
+
+/* ==========================================
+   ESTADO VACÍO / CARGANDO
+========================================== */
+
+.pedidos-cargando,
+.pedidos-vacio {
+    text-align: center;
+    color: #777777;
+    padding: 30px 10px;
+}
+
+.pedidos-vacio a {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 12px 25px;
+    background: #111111;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.pedidos-vacio a:hover {
+    background: #333333;
+}
+
+
+/* ==========================================
+   TARJETA DE UN PEDIDO
+========================================== */
+
+.tarjeta-pedido {
+    border: 1px solid #eeeeee;
+    border-radius: 12px;
+    padding: 22px;
+    margin-bottom: 20px;
+}
+
+.tarjeta-pedido:last-child {
+    margin-bottom: 0;
+}
+
+
+/* ==========================================
+   ENCABEZADO DEL PEDIDO
+========================================== */
+
+.encabezado-pedido {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.encabezado-pedido h3 {
+    font-size: 17px;
+    color: #111111;
+    margin-bottom: 4px;
+}
+
+.fecha-pedido {
+    display: block;
+    color: #999999;
+    font-size: 13px;
+    text-transform: capitalize;
+}
+
+
+/* ==========================================
+   BADGE DE ESTADO
+========================================== */
+
+.badge-estado {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    height: fit-content;
+}
+
+.estado-pendiente {
+    background: #fff3cd;
+    color: #8a6d00;
+}
+
+.estado-procesando {
+    background: #d6e4ff;
+    color: #1d4ed8;
+}
+
+.estado-enviado {
+    background: #e5d6ff;
+    color: #6d28d9;
+}
+
+.estado-entregado {
+    background: #d4f4dd;
+    color: #15803d;
+}
+
+.estado-cancelado {
+    background: #fde0e0;
+    color: #c1121f;
+}
+
+
+/* ==========================================
+   TRACKER DE SEGUIMIENTO
+========================================== */
+
+.tracker-pedido {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+    padding: 0 4px;
+}
+
+.paso-tracker {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    text-align: center;
+}
+
+/* Línea conectora entre pasos */
+
+.paso-tracker::before {
+    content: "";
+    position: absolute;
+    top: 7px;
+    left: -50%;
+    width: 100%;
+    height: 3px;
+    background: #eeeeee;
+    z-index: 0;
+}
+
+.paso-tracker:first-child::before {
+    display: none;
+}
+
+.paso-tracker.paso-completado::before {
+    background: #111111;
+}
+
+.punto-tracker {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #eeeeee;
+    border: 3px solid #eeeeee;
+    z-index: 1;
+    margin-bottom: 8px;
+}
+
+.paso-tracker.paso-completado .punto-tracker {
+    background: #111111;
+    border-color: #111111;
+}
+
+.paso-tracker.paso-actual .punto-tracker {
+    background: #e63946;
+    border-color: #e63946;
+    box-shadow: 0 0 0 4px rgba(230, 57, 70, 0.15);
+}
+
+.texto-tracker {
+    font-size: 11px;
+    color: #999999;
+    font-weight: 500;
+}
+
+.paso-tracker.paso-completado .texto-tracker {
+    color: #111111;
+}
+
+.paso-tracker.paso-actual .texto-tracker {
+    color: #e63946;
+    font-weight: 700;
+}
+
+
+/* Pedido cancelado */
+
+.tracker-cancelado {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    background: #fde0e0;
+    color: #c1121f;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 24px;
+}
+
+
+/* ==========================================
+   PRODUCTOS DEL PEDIDO
+========================================== */
+
+.productos-pedido {
+    border-top: 1px solid #f0f0f0;
+    padding-top: 14px;
+}
+
+.item-pedido {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: 14px;
+    color: #333333;
+}
+
+.precio-item {
+    color: #777777;
+}
+
+
+/* ==========================================
+   TOTAL DEL PEDIDO
+========================================== */
+
+.total-pedido {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid #f0f0f0;
+    font-size: 15px;
+}
+
+.total-pedido strong {
+    color: #111111;
+    font-size: 17px;
+}
+
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 600px) {
+
+    .pedidos-card {
+        padding: 25px 20px;
+    }
+
+    .titulo-pedidos {
+        font-size: 20px;
+    }
+
+    .texto-tracker {
+        font-size: 9px;
+    }
+
+    .encabezado-pedido h3 {
+        font-size: 15px;
+    }
 
 }

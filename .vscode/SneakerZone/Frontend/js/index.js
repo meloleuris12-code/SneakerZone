@@ -47,6 +47,62 @@ let carrito =
 
 
 // ==========================================
+// MAPA DE PRODUCTOS REALES (NOMBRE -> ID)
+// ==========================================
+//
+// Los productos destacados de esta página (index.html)
+// están escritos directamente en el HTML, sin id_producto.
+// Para poder registrar pedidos correctamente en el servidor,
+// se consulta la lista real de productos de la base de datos
+// y se arma un mapa por nombre para obtener el id_producto
+// correspondiente antes de agregar algo al carrito.
+
+let mapaProductos = {};
+
+async function cargarMapaProductos() {
+
+    try {
+
+        const respuesta =
+            await fetch(
+                "http://localhost:8080/productos"
+            );
+
+        if (!respuesta.ok) {
+
+            throw new Error(
+                "No se pudo obtener la lista de productos"
+            );
+
+        }
+
+        const productos =
+            await respuesta.json();
+
+        productos.forEach(
+            function(producto) {
+
+                mapaProductos[producto.nombre] =
+                    producto.id_producto;
+
+            }
+        );
+
+    } catch (error) {
+
+        console.error(
+            "No se pudo cargar el mapa de productos:",
+            error
+        );
+
+    }
+
+}
+
+cargarMapaProductos();
+
+
+// ==========================================
 // BOTONES AGREGAR AL CARRITO
 // ==========================================
 
@@ -153,9 +209,30 @@ botonesAgregar.forEach(
 
                 } else {
 
+                    // Buscar el id_producto real usando el mapa
+                    // cargado desde la base de datos
+
+                    const idProducto =
+                        mapaProductos[nombre];
+
+
+                    if (!idProducto) {
+
+                        alert(
+                            "Este producto no está disponible todavía. " +
+                            "Agrégalo desde la página de Productos."
+                        );
+
+                        return;
+
+                    }
+
+
                     carrito.push({
 
                         id: Date.now(),
+
+                        id_producto: idProducto,
 
                         nombre: nombre,
 
